@@ -1,5 +1,3 @@
-#include "Seqlist.h"
-
 template <typename Type>
 int SeqList<Type>::Find(Type x) const
 {
@@ -10,37 +8,43 @@ int SeqList<Type>::Find(Type x) const
 			return i;
 		}
 	}
-	cout<<"can't find the element you want to find"<<endl;
+	cout<<"Can't find the element you want to find"<<endl;
 	return -1;
 }
 
 template <typename Type>
-int SeqList<Type>::IsElement(Type x) const
+bool SeqList<Type>::IsElement(Type x) const
 {
 	if (Find(x)==-1)
 	{
-		return 0;
+		return false;
 	}
-	return 1;
+	return true;
 }
 
 template <typename Type>
-int SeqList<Type>::Insert(Type x, int i)
+void SeqList<Type>::Insert(Type x, int i)
 {
-	if (i<0 || i>m_ncurrentsize || m_ncurrentsize==m_nmaxsize-1)
+	if (i<0 || i>m_ncurrentsize)
 	{
-		cout<<"the operate is illegal"<<endl;
-		return 0;
+		cout<<"Insert location is wrong"<<endl;
+		exit(1);
 	}
+	if (m_ncurrentsize==m_nmaxsize)
+	{
+		cout<<"List is full"<<endl;
+		exit(1);
+	}
+	for (int j = m_ncurrentsize; j>i ; j--)
+	{
+		m_elements[j] = m_elements[j-1];
+	}
+	m_elements[i]=x;
 	m_ncurrentsize++;
-	for (int j = m_ncurrentsize; i >1 ; j--)
-	{
-		m_elements[i] = x;
-	}
 }
 
 template<typename Type>
-int SeqList<Type>::Remove(Type x)
+bool SeqList<Type>::Remove(Type x)
 {
 	int size = m_ncurrentsize;
 	for (int i = 0; i < m_ncurrentsize; ++i)
@@ -57,18 +61,19 @@ int SeqList<Type>::Remove(Type x)
 	}
 	if (size==m_ncurrentsize)
 	{
-		cout<<"can't find the element you want to remove."<<endl;
-		return 0;
+		cout<<"Can't find the element you want to remove."<<endl;
+		return false;
 	}
-	return 1;
+	return true;
 }
 
 template <typename Type>
 void SeqList<Type>::Print()
 {
+	cout<<"------------"<<endl;
 	for (int i = 0; i < m_ncurrentsize; ++i)
 	{
 		cout<<i+1<<":\t"<<m_elements[i]<<endl;
 	}
-	cout<<endl;
+	cout<<"------------"<<endl;
 }

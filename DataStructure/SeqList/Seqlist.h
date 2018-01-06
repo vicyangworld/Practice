@@ -1,9 +1,17 @@
-const int DefaultSize=100;
+#include <iostream>
+#include <stdlib.h>
+using std::cout;
+using std::endl;
 
+const int DefaultSize=100;
 template <typename Type>
 class SeqList{
+private:
+	Type *m_elements;
+	const int m_nmaxsize;
+	int m_ncurrentsize;
 public:
-	SeqList(int sz=DefaultSize) : m_nmaxsize(sz),m_ncurrentsize(-1)
+	SeqList(int sz=DefaultSize) : m_nmaxsize(sz),m_ncurrentsize(0)
 	{
 		if (sz>0)
 		{
@@ -16,27 +24,25 @@ public:
 	}
 	int Length() const
 	{
-		return m_ncurrentsize+1
+		return m_ncurrentsize;
 	}
 	int Find(Type x) const;
-	int IsElement(Type x) const;
-	int Insert(Type x, int i);
-	int Remove(Type x);
-	int IsEmpty()
+	bool IsElement(Type x) const;
+	void Insert(Type x, int i);
+	bool Remove(Type x);
+	bool IsEmpty()
 	{
-		return m_ncurrentsize==-1;
+		return m_ncurrentsize==0;
 	}
-	int IsFull()
+	bool IsFull()
 	{
-		return m_ncurrentsize == m_nmaxsize-1;
+		return m_ncurrentsize == m_nmaxsize;
 	}
 	Type Get(int i)
 	{
 		return i<0 || i>m_ncurrentsize ? (cout<<"can't find the element"<<endl,0) : m_elements[i];
 	}
 	void Print();
-private:
-	Type *m_elements;
-	const int m_nmaxsize;
-	int m_ncurrentsize;
 };
+
+#include "Seqlist.cpp"
