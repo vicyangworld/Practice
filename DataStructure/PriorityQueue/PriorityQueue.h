@@ -1,5 +1,12 @@
+#ifndef _H_PRIORITYQUEUE_
+#define _H_PRIORITYQUEUE_ 1000
+
 #include "QueueNode.h"
 #include "Compare.h"
+#include <stdlib.h>
+
+using std::cout;
+using std::endl;
 
 template<typename T, typename CMP> class PriorityQueue
 {
@@ -17,6 +24,9 @@ public:
 	T Delete();
 	T GetFront() const;
 	void Print() const;
+	int Length() const{
+		return m_nLength;
+	}
 	bool IsEmpty() const{
 		return m_pfront == NULL;
 	}
@@ -24,7 +34,7 @@ public:
 
 template<typename T, typename CMP> void PriorityQueue<T,CMP>::MakeEmpty(){
 	QueueNode<T,CMP> *pdel;
-	while(){
+	while(m_pfront){
 		pdel = m_pfront;
 		m_pfront = m_pfront->m_pnext;
 		delete pdel;
@@ -32,10 +42,10 @@ template<typename T, typename CMP> void PriorityQueue<T,CMP>::MakeEmpty(){
 	m_nLength = 0;
 }
 
-template<typename T,typename CMD> void PriorityQueue<T,CMP>::Append(const T item){
+template<typename T,typename CMP> void PriorityQueue<T,CMP>::Append(const T item){
 	if (m_pfront==NULL)
 	{
-		m_pfront = new QueueNode<T,CMD>(item);
+		m_pfront = new QueueNode<T,CMP>(item);
 		m_prear = m_pfront;
 	}
 	else{
@@ -60,29 +70,47 @@ template<typename T,typename CMP>T PriorityQueue<T,CMP>::Delete(){
 		}
 		pmove = pmove->m_pnext;
 	}
+	bool bFirst = false;
+	if (CMP::lt(m_pfront->m_data, pdel->m_pnext->m_data))
+	{
+		pdel = m_pfront;
+		m_pfront = pdel->m_pnext;
+	}
 	pmove=pdel;
 	pdel = pdel->m_pnext;
 	pmove->m_pnext = pdel->m_pnext;
+
 	T temp = pdel->m_data;
 	delete pdel;
 	m_nLength--;
 	return temp;
 }
 
-template<typename T, typename CMP> T PriorityQueue<T,CMP>::GetFront(){
+template<typename T, typename CMP> T PriorityQueue<T,CMP>::GetFront() const{
 	if (IsEmpty())
 	{
 		cout<<"There is no element!"<<endl;
 		exit(1);
 	}
-	QueueNode<T,CMP> *pdel = m_pfront;
+	QueueNode<T,CMP> *pmin = m_pfront;
 	QueueNode<T,CMP> *pmove= m_pfront->m_pnext;
 	while(pmove){
-		if (CMP::lt(pmove->m_data, pdel->m_data))
+		if (CMP::lt(pmove->m_data, pmin->m_data))
 		{
-			pdel = pmove;
+			pmin = pmove;
 		}
 		pmove = pmove->m_pnext;
 	}
-	return pdel->m_data;
+	return pmin->m_data;
 }
+
+template<typename T, typename CMP> void PriorityQueue<T,CMP>::Print() const{
+	QueueNode<T,CMP> *pmove = m_pfront;
+	cout<<"front";
+	while(pmove){
+		cout<<"-->"<<pmove->m_data;
+		pmove = pmove->m_pnext;
+	}
+	cout<<"-->rear"<<endl<<endl;
+}
+#endif

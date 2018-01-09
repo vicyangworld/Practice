@@ -1,5 +1,5 @@
 #ifndef _H_QUEUENODE_
-#define _H_QUEUENODE_ value
+#define _H_QUEUENODE_ 1001
 
 template<typename T, typename CMP> class PriorityQueue;
 

@@ -1,23 +1,24 @@
 #include <iostream>
-#include "cstlib.h"
 #include "PriorityQueue.h"
+#include "Compare.h"
 
 int main(int argc, char const *argv[])
 {
-	PriorityQueue<int,Compare<int>> queue;
-	int init[10]={1,9,4,7,3,,5,2,10,6,8};
+	PriorityQueue<int,Compare<int> > queue;
+	int init[10]={9,4,7,3,10,5,2,1,6,8};
 	for (int i = 0; i < 10; ++i)
 	{
 		queue.Append(init[i]);
 	}
 	cout<<"Length:"<<queue.Length()<<endl;
 	queue.Print();
-	cout<<"after delete:"<<endl;
-	queue.Delete();
+	cout<<"after delete:";
+	cout<<queue.Delete()<<endl;
 	queue.Print();
+	cout<<"Front:";
+	cout<<queue.GetFront()<<endl;
+	cout<<"------------------------------------------------------"<<endl<<endl;
 
-	system("pause");
-	system("cls");
 
 	PriorityQueue<SpecialData,SpecialCompare> spe_queue;
 	int init2[5][2]={{23,2},{12,6},{65,8},{56,1},{39,4}};
@@ -29,13 +30,14 @@ int main(int argc, char const *argv[])
 	}
 	for (int i = 0; i < 5; ++i)
 	{
-		spe_queue.Append(data[i])
+		spe_queue.Append(data[i]);
 	}
 	spe_queue.Print();
 	cout<<"Front:";
-	cout<<spe_queue.GetFront()<<endl<<endl;
+	SpecialData dd = spe_queue.GetFront();
+	cout<<dd<<endl;
 	spe_queue.Delete();
-	cout<<"after delete:"
+	cout<<"after delete:"<<endl;
 	spe_queue.Print();
 	return 0;
 }

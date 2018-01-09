@@ -1,5 +1,8 @@
 #ifndef _H_COMPARE_
-#define _H_COMPARE_ value
+#define _H_COMPARE_ 1090
+
+#include <iostream>
+using std::ostream;
 
 template<typename T> class Compare
 {
@@ -13,18 +16,13 @@ template<typename T> bool Compare<T>::lt(T item1, T item2){
 
 struct SpecialData
 {
-	friend ostream& operator<<(ostream&, SpecialData &);
+	friend ostream& operator<<(ostream&, SpecialData&);
 	int m_ntenor;
 	int m_npir;
 };
 
-ostream & operator<<(ostream& os, SpecialData &out){
-	os<<out.m_ntenor<<"..."<<out.m_npir;
-	return os;
-};
-
 ostream& operator<<(ostream& os, SpecialData &out){
-	os<<out.m_ntenor<<"..."<<out.m_npir;
+	os<<"("<<out.m_ntenor<<","<<out.m_npir<<")";
 	return os;
 };
 
