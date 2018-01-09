@@ -34,8 +34,8 @@ int main(int argc, char const *argv[])
 	}
 	spe_queue.Print();
 	cout<<"Front:";
-	SpecialData dd = spe_queue.GetFront();
-	cout<<dd<<endl;
+	SpecialData dd = spe_queue.GetFront();//!!!!!!!1
+	cout<<dd<<endl;//!!!!!!
 	spe_queue.Delete();
 	cout<<"after delete:"<<endl;
 	spe_queue.Print();
