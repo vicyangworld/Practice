@@ -1,6 +1,9 @@
 #ifndef _H_MYSTRING_
 #define _H_MYSTRING_ value
 
+using std::ostream;
+using std::istream;
+
 const int MaxSize = 100;
 class myString
 {
@@ -17,7 +20,7 @@ public:
 	}
 
 	int Length() const{
-		return m_ncurlen；
+		return m_ncurlen;
 	}
 	bool Find(myString part) const;
 	char* GetBuffer() const;
@@ -31,11 +34,9 @@ public:
 	}
 
 	myString& operator=(const myString& copy);
-	myString operator+=(const myString& add);
+	myString& operator+=(const myString& add);
 	char& operator[](int i);
 	friend ostream& operator<<(ostream&, myString&);
 	friend istream& operator>>(istream&, myString&);
-private:
-	void next();
 };
 #endif

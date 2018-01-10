@@ -1,9 +1,12 @@
 #include <iostream>
 #include "myString.h"
 
+using std::cout;
+using std::endl;
+
 int main(int argc, char const *argv[])
 {
-	myString str1("baobei");
+	myString str1("rongbaobei");
 	myString str2("xiaorongbaobeiainiyou");
 	cout<<str2.Find(str1)<<endl;
 	cout<<str2(2,3)<<endl;
@@ -20,7 +23,7 @@ int main(int argc, char const *argv[])
 	{
 		cout<<str1<<">"<<str2<<endl;
 	}
-	cout<<"print st2:"<<endl;
+	cout<<"print st2: ";
 	int length=str2.Length();
 	for (int i = 0; i < length; ++i)
 	{
