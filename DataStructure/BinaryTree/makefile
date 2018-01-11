@@ -4,13 +4,11 @@ CXX := g++
 #srcfiles := $(shell find . -maxdepth 1 -name "*.cpp")
 #objects  := $(patsubst %.cpp, %.o, $(srcfiles))
 
-
-objects = main.o myString.o
+objects = main.o
 $(appname) : $(objects)
 	$(CXX) -o $(appname) $(objects) 
 
-main.o:myString.h
-myString.o:myString.h
+main.o: BinaryTreeNode.h BinaryTree.h
 
 clean :
 	rm $(appname) $(objects)

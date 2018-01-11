@@ -1,15 +1,19 @@
 #ifndef _H_BINARYTREE_
 #define _H_BINARYTREE_ value
 
-#include "BinTreeNode.h"
+#include "BinaryTreeNode.h"
+using std::cout;
+using std::endl;
+using std::ostream;
+using std::istream;
 
 template<typename T> class BinaryTree
 {
 private:
 	T m_stop;
-	BinTreeNode<T> *m_proot;
+	BinaryTreeNode<T> *m_proot;
 public:
-	BinaryTree():m_root(NULL){}
+	BinaryTree():m_proot(NULL){}
 	BinaryTree(const T stop):m_stop(stop),m_proot(NULL){}
 	BinaryTree(BinaryTree<T>& copy);
 	virtual ~BinaryTree(){
@@ -18,12 +22,12 @@ public:
 	virtual bool IsEmpty(){
 		return m_proot == NULL;
 	}
-	virtual BinTreeNode<T> *GetLeft(BinTreeNode<T> *current);
-	virtual BinTreeNode<T> *GetRight(BinTreeNode<T> *current);
-	virtual BinTreeNode<T> *GetParent(BinTreeNode<T> *current);
-	const BinTreeNode<T> *GetRoot() const;
+	virtual BinaryTreeNode<T> *GetLeft(BinaryTreeNode<T> *current);
+	virtual BinaryTreeNode<T> *GetRight(BinaryTreeNode<T> *current);
+	virtual BinaryTreeNode<T> *GetParent(BinaryTreeNode<T> *current);
+	const BinaryTreeNode<T> *GetRoot() const;
 	virtual bool Insert(const T item);
-	virtual BinTreeNode<T> *Find(const T item) const;
+	virtual BinaryTreeNode<T> *Find(const T item) const;
 
 	void InOrder();
 	void PreOrder();
@@ -32,14 +36,14 @@ public:
 	int GetSize();
 	int GetHeight();
 
-	BinTreeNode<T>& operator=(const BinaryTree<T> copy);
+	BinaryTree<T>& operator=(const BinaryTree<T> copy);
 
-	friend bool operator== <T>(const BinTreeNode<T> s, const BinaryTree<T> t);
-	friend ostream& operator<< <T>(ostream&, BinaryTree<T>&);
-	friend istream& operator>> <T>(istream&, BinTreeNode<T>&);
+	friend bool operator == <T>(const BinaryTree<T> s, const BinaryTree<T> t);
+	friend ostream& operator << <T>(ostream&, BinaryTree<T>&);
+	friend istream& operator >> <T>(istream&, BinaryTree<T>&);
 private:
-	BinTreeNode<T> *GetParent(BinTreeNode<T> *start, BinTreeNode<T> *current);
-	void Print(BinTreeNode<T> *start, int n=0);
+	BinaryTreeNode<T> *GetParent(BinaryTreeNode<T> *start, BinaryTreeNode<T> *current);
+	void Print(BinaryTreeNode<T> *start, int n=0);
 };
 
 template<typename T> BinaryTree<T>::BinaryTree(BinaryTree<T> &copy){
@@ -50,19 +54,19 @@ template<typename T> BinaryTree<T>::BinaryTree(BinaryTree<T> &copy){
 	m_proot = m_proot->Copy(copy.m_proot);
 }
 
-template<typename T> BinTreeNode<T>* BinaryTree<T>::GetLeft(BinaryTree<T> *current){
+template<typename T> BinaryTreeNode<T>* BinaryTree<T>::GetLeft(BinaryTreeNode<T> *current){
 	return m_proot&&current ? current->m_pleft : NULL;
 }
 
-template<typename T> BinTreeNode<T>* BinaryTree<T>::GetRight(BinTreeNode<T> *current){
+template<typename T> BinaryTreeNode<T>* BinaryTree<T>::GetRight(BinaryTreeNode<T> *current){
 	return m_proot&&current ? current->m_pright : NULL;
 }
 
-template<typename T> const BinTreeNode<T>* BinaryTree<T>::GetRoot() const{
+template<typename T> const BinaryTreeNode<T>* BinaryTree<T>::GetRoot() const{
 	return m_proot;
 }
 
-template<typename T> BinTreeNode<T>* BinaryTree<T>::GetParent(BinTreeNode<T> *start, BinTreeNode<T> *current){
+template<typename T> BinaryTreeNode<T>* BinaryTree<T>::GetParent(BinaryTreeNode<T> *start, BinaryTreeNode<T> *current){
 	if (start==NULL || current==NULL)
 	{
 		return NULL;
@@ -71,7 +75,7 @@ template<typename T> BinTreeNode<T>* BinaryTree<T>::GetParent(BinTreeNode<T> *st
 	{
 		return start;
 	}
-	BinTreeNode<T> *pmove;
+	BinaryTreeNode<T> *pmove;
 	if ((pmove==GetParent(start->m_pleft, current))!=NULL)
 	{
 		return pmove;
@@ -81,13 +85,13 @@ template<typename T> BinTreeNode<T>* BinaryTree<T>::GetParent(BinTreeNode<T> *st
 	}
 }
 
-template<typename T> BinTreeNode<T>* BinaryTree<T>::GetParent(BinTreeNode<T> *current){
+template<typename T> BinaryTreeNode<T>* BinaryTree<T>::GetParent(BinaryTreeNode<T> *current){
 	return m_proot==NULL || current==m_proot ? NULL : GetParent(m_proot,current);
 }
 
 template<typename T> bool BinaryTree<T>::Insert(const T item){
-	BinTreeNode<T> *pstart = m_proot;
-	BinTreeNode<T> *newnode = new BinTreeNode<T>(item);
+	BinaryTreeNode<T> *pstart = m_proot;
+	BinaryTreeNode<T> *newnode = new BinaryTreeNode<T>(item);
 	if (m_proot==NULL)
 	{
 		m_proot = newnode;
@@ -119,8 +123,8 @@ template<typename T> bool BinaryTree<T>::Insert(const T item){
 	}
 }
 
-template<typename T> BinTreeNode<T>* BinaryTree<T>::Find(const T item) const{
-	BinTreeNode<T> *pstart = m_proot;
+template<typename T> BinaryTreeNode<T>* BinaryTree<T>::Find(const T item) const{
+	BinaryTreeNode<T> *pstart = m_proot;
 	while(pstart){
 		if (item==pstart->m_data)
 		{
@@ -138,7 +142,7 @@ template<typename T> BinTreeNode<T>* BinaryTree<T>::Find(const T item) const{
 	return NULL;
 }
 
-template<typename T> void BinaryTree<T>::Print(BinTreeNode<T> *start, int n){
+template<typename T> void BinaryTree<T>::Print(BinaryTreeNode<T> *start, int n){
 	if (start==NULL)
 	{
 		for (int i = 0; i < n; ++i)
@@ -183,6 +187,10 @@ template<typename T> istream& operator>>(istream& is, BinaryTree<T>& in){
 		is>>item;
 	}
 	return is;
+}
+
+template<typename T> bool operator==(const BinaryTree<T> s, const BinaryTree<T> t){
+	return equal(s.m_proot, t.m_proot);
 }
 
 template<typename T> void BinaryTree<T>::InOrder(){
