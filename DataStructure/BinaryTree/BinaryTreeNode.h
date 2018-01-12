@@ -1,5 +1,5 @@
 #ifndef _H_BINTREENODE_
-#define _H_BINTREENODE_ value
+#define _H_BINTREENODE_ 100001
 
 using std::cout;
 using std::endl;
@@ -12,12 +12,22 @@ private:
 	T m_data;
 public:
 	friend class BinaryTree<T>;
-	friend bool Equal<T>(const BinaryTreeNode<T> *s, const BinaryTreeNode<T> *t);
+	friend bool Equal(const BinaryTreeNode<T> *s, const BinaryTreeNode<T> *t){
+		if (s==NULL && t==NULL)
+		{
+			return true;
+		}
+		if (s && t && s->m_data==t->m_data && Equal(s->m_pleft,t->m_pleft) && Equal(s->m_pright,t->m_pright))
+		{
+			return true;
+		}
+		return false;
+	}
 	
 	BinaryTreeNode():m_pleft(NULL),m_pright(NULL){}
 	BinaryTreeNode(T item, BinaryTreeNode<T> *left=NULL,BinaryTreeNode<T> *right=NULL)
 		:m_data(item),m_pleft(left),m_pright(right){}
-	~BinaryTreeNode();
+	~BinaryTreeNode(){}
 	T GetData() const;
 	BinaryTreeNode<T> *GetLeft() const;
 	BinaryTreeNode<T> *GetRight() const;
@@ -91,23 +101,24 @@ template<typename T> void BinaryTreeNode<T>::Destroy(){
 	}
 }
 
-template<typename T> bool Equal(const BinaryTreeNode<T> *s, const BinaryTreeNode<T> *t){
-	if (s==NULL && t==NULL)
-	{
-		return true;
-	}
-	if (s && t && s->m_data==t->m_data && Equal(s->m_pleft,t->m_pleft) && Equal(s->m_pright,t->m_pright))
-	{
-		return true;
-	}
-	return false;
-}
+// template<typename T> bool Equal(const BinaryTreeNode<T> *s, const BinaryTreeNode<T> *t){
+// 	if (s==NULL && t==NULL)
+// 	{
+// 		return true;
+// 	}
+// 	if (s && t && s->m_data==t->m_data && Equal(s->m_pleft,t->m_pleft) && Equal(s->m_pright,t->m_pright))
+// 	{
+// 		return true;
+// 	}
+// 	return false;
+// }
 
 
 template<typename T> void BinaryTreeNode<T>::InOrder(){
 	if (this!=NULL)
 	{
-		this<<"--->"<<this->m_data;
+		this->m_pleft->InOrder();
+		cout<<"--->"<<this->m_data;
 		this->m_pright->InOrder();
 	}
 }
