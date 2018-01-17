@@ -35,14 +35,14 @@ void BTree::Create(int *itemArr, int num, int &index)
 	Create(m_proot, itemArr, num, index);
 }
 
-void BTree::Destroy(BTreeNode *&node)
+void BTree::Destroy(BTreeNode *&pnode)
 {
-	if (node)
+	if (pnode && pnode->m_lTag==Link && pnode->m_rTag==Link)
 	{
-		Destroy(node->m_lChild);
-		Destroy(node->m_rChild);
-		delete node;
-		node = NULL;
+		Destroy(pnode->m_lChild);
+		Destroy(pnode->m_rChild);
+		delete pnode;
+		pnode = NULL;
 	}
 }
 
@@ -155,17 +155,10 @@ void BTree::NotReInOrder()
 	}
 }
 
-//重载形式
-void BTree::preOrder()
-{
-	preOrder(m_proot);
-	cout<<endl;
-}
-
 //前序递归访问二叉树(递归)
 void BTree::preOrder(BTreeNode* pnode)
 {
-	if(pnode!=0) //是if，而不是while
+	if(pnode != NULL  && pnode->m_lTag==Link && pnode->m_rTag==Link) //是if，而不是while
 	{
 		cout<<pnode->m_data<<" ";
 		preOrder(pnode->m_lChild); //递归访问
@@ -173,6 +166,13 @@ void BTree::preOrder(BTreeNode* pnode)
 	}
 }
 
+
+//重载形式
+void BTree::preOrder()
+{
+	preOrder(m_proot);
+	cout<<endl;
+}
 
 //前序遍历(非递归)
 void BTree::NotRePreOrder()
@@ -338,16 +338,12 @@ int BTree::layerHeight()
 	while(!que.empty())
 	{
 		//BTreeNode* btreePtr=0;
-
 		temp=que.front(); //取出队首元素
 		que.pop();
-
 		pnode=temp.ptr;
-
 		//用当前的高度跟取出的队首进行比较
 		if(hei<temp.height)
 			hei=temp.height;
-
 		if(pnode->m_lChild!=NULL || pnode->m_rChild!=NULL)
 		{
 			//如果它的左右子树不为空，则进队列
