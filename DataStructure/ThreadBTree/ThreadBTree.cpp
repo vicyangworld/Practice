@@ -55,14 +55,20 @@ BTreeNode* BTree::Find(BTreeNode*pstart, const int item) const{
 	{
 		return pstart;
 	}
-	pstart = Find(pstart->m_lChild, item);
+	if (pstart->m_lTag==Link)
+	{
+		pstart = Find(pstart->m_lChild, item);
+	}
 	if (pstart!=NULL && pstart->m_data==item)
 	{
 		return pstart;
 	}
 	else
 	{
-		return Find(pstart->m_lChild, item);
+		if (pstart->m_rTag==Link)
+		{
+			return Find(pstart->m_rChild, item);
+		}
 	}
 }
 
@@ -71,22 +77,33 @@ BTreeNode* BTree::Find(const int item) const{
 }
 
 
-BTreeNode * BTree::GetParent(BTreeNode *start,BTreeNode * current){
-	if (start==NULL || current==NULL)
+BTreeNode * BTree::GetParent(BTreeNode *pstart,BTreeNode * current){
+	if (pstart==NULL|| current==NULL)
 	{
 		return NULL;
 	}
-	if (start->m_lChild==current || start->m_rChild==current)
+	if ((pstart->m_lChild==current && pstart->m_lTag==Link) || (pstart->m_rChild==current) && pstart->m_lTag==Link)
 	{
-		return start;
+		return pstart;
 	}
-	BTreeNode *pmove = GetParent(start->m_lChild, current);
+	BTreeNode *pmove;
+	if (pstart->m_lTag==Link)
+	{
+		pmove = GetParent(pstart->m_lChild, current);
+	}
 	if (pmove != NULL)
 	{
 		return pmove;
 	}
 	else{
-		return GetParent(start->m_rChild,current);
+			if (pstart->m_rTag==Link)
+			{
+				return GetParent(pstart->m_rChild,current);
+			}
+			else
+			{
+				return NULL;
+			}
 	}
 }
 
@@ -100,16 +117,27 @@ void BTree::layerOrder(){
 		BTreeNode* temp = que.front();
 		que.pop();
 		cout<<temp->m_data<<" ";
-		if(temp->m_lChild != NULL)
+		if(temp->m_lChild != NULL && temp->m_lTag==Link)
 		{
 			que.push(temp->m_lChild);
 		}
-		if(temp->m_rChild != NULL)
+		if(temp->m_rChild != NULL && temp->m_rTag==Link)
 		{
 			que.push(temp->m_rChild);
 		}
 	}
 	cout<<endl;
+}
+
+//中序访问二叉树(递归)
+void BTree::inOrder(BTreeNode* pnode)
+{
+	if(pnode!=0) //是if，而不是while
+	{
+		inOrder(pnode->m_lChild); //递归访问
+		cout<<pnode->m_data<<" ";
+		inOrder(pnode->m_rChild); //递归访问
+	}
 }
 
 //利用重载的方法
@@ -119,38 +147,27 @@ void BTree::inOrder()
 	cout<<endl;
 }
 
-//中序访问二叉树(递归)
-void BTree::inOrder(BTreeNode* r)
-{
-	if(r!=0) //是if，而不是while
-	{
-		inOrder(r->m_lChild); //递归访问
-		cout<<r->m_data<<" ";
-		inOrder(r->m_rChild); //递归访问
-	}
-}
-
 //中序遍历(非递归)
 void BTree::NotReInOrder()
 {
-	stack<BTreeNode*> s;
+	stack<BTreeNode*> stk;
 
-	BTreeNode* r=getRoot();
+	BTreeNode* pnode=getRoot();
 
-	while(!s.empty()||r!=0)
+	while(!stk.empty()||pnode != NULL)
 	{
-		while(r!=0)
+		while(pnode != NULL)
 		{
-			s.push(r);
-			r=r->m_lChild;
+			stk.push(pnode);
+			pnode = pnode->m_lChild;
 		}
 
-		if(!s.empty())
+		if(!stk.empty())
 		{
-			r=s.top();
-			s.pop();
-			cout<<r->m_data<<" ";
-			r=r->m_rChild;
+			pnode = stk.top();
+			stk.pop();
+			cout<<pnode->m_data<<" ";
+			pnode = pnode->m_rChild;
 		}
 	}
 }
@@ -177,24 +194,34 @@ void BTree::preOrder()
 //前序遍历(非递归)
 void BTree::NotRePreOrder()
 {
-	stack<BTreeNode*> s;
-	BTreeNode* r=getRoot();
-	s.push(r);
+	stack<BTreeNode*> stk;
+	BTreeNode* pnode=getRoot();
+	stk.push(pnode);
 
-	while(!s.empty())
+	while(!stk.empty())
 	{
-		r=s.top();
-		s.pop();
+		pnode=stk.top();
+		stk.pop();
 
-		cout<<r->m_data<<" ";
+		cout<<pnode->m_data<<" ";
 
-		if(r->m_rChild!=0)
-			s.push(r->m_rChild);
-		if(r->m_lChild!=0)
-			s.push(r->m_lChild);
+		if(pnode->m_rChild != NULL && pnode->m_rTag==Link)
+			stk.push(pnode->m_rChild);
+		if(pnode->m_lChild!=0 && pnode->m_lTag==Link)
+			stk.push(pnode->m_lChild);
 	}
 }
 
+//后序遍历(递归)
+void BTree::postOrder(BTreeNode* pnode)
+{
+	if(pnode != NULL) //是if，而不是while
+	{
+		postOrder(pnode->m_lChild); //递归访问
+		postOrder(pnode->m_rChild); //递归访问
+		cout<<pnode->m_data<<" ";
+	}
+}
 
 //重载形式
 void BTree::postOrder()
@@ -203,16 +230,7 @@ void BTree::postOrder()
 	cout<<endl;
 }
 
-//后序遍历(递归)
-void BTree::postOrder(BTreeNode* r)
-{
-	if(r!=0) //是if，而不是while
-	{
-		postOrder(r->m_lChild); //递归访问
-		postOrder(r->m_rChild); //递归访问
-		cout<<r->m_data<<" ";
-	}
-}
+
 
 
 //后序非递归访问要定义新的结构体类型
@@ -226,34 +244,34 @@ struct Node
 void BTree::NotRePostOrder()
 {
 	Node node; //定义Node结构体的一个结点
-	stack<Node> s;
+	stack<Node> stk;
 
-	BTreeNode* r=getRoot();
-	while(!s.empty()||r!=0)
+	BTreeNode* pnode=getRoot();
+	while(!stk.empty()||pnode!=0)
 	{
-		while(r!=0)
+		while(pnode!=0)
 		{
-			node.tp=r;
+			node.tp=pnode;
 			node.flag=0;
-			s.push(node);
-			r=r->m_lChild;
+			stk.push(node);
+			pnode=pnode->m_lChild;
 		}
 
-		if(!s.empty())
+		if(!stk.empty())
 		{
-			node=s.top();
-			s.pop();
-			r=node.tp; //将栈顶的BTreeNode*部分赋给r
+			node=stk.top();
+			stk.pop();
+			pnode=node.tp; //将栈顶的BTreeNode*部分赋给r
 			if(node.flag==1)
 			{
-				cout<<r->m_data<<" ";
-				r=0; //表示已经访问了该结点
+				cout<<pnode->m_data<<" ";
+				pnode=0; //表示已经访问了该结点
 			}
 			else
 			{
 				node.flag=1;
-				s.push(node);
-				r=r->m_rChild;
+				stk.push(node);
+				pnode=pnode->m_rChild;
 			}
 		}
 	}
@@ -274,15 +292,13 @@ int BTree::GetSize()
 	return GetSize(m_proot);
 }
 
-
-
 //求二叉树叶子结点个数的函数
 int BTree::GetLeaves(BTreeNode* node)
 {
 	//当为空时，返回0；当找到叶子时返回1
 	if(node==0) return 0; 
 	else
-		if(node->m_lChild == NULL && node->m_rChild == NULL)
+		if(node->m_lChild == NULL && node->m_lTag==Link && node->m_rChild == NULL && node->m_rTag == Link)
 			return 1;
 		else
 			return GetLeaves(node->m_lChild) + GetLeaves(node->m_rChild);
@@ -295,14 +311,14 @@ int BTree::GetLeaves()
 }
 
 //求二叉树高度的函数
-int BTree::GetHeight(BTreeNode* r)
+int BTree::GetHeight(BTreeNode* pnode)
 {
-	if(r==0) return 0;
+	if(pnode==0) return 0;
 	else
 	{
 		//二叉树的高度为左右子树的最大者+1
-		int lHei=GetHeight(r->m_lChild);
-		int rHei=GetHeight(r->m_rChild);
+		int lHei=GetHeight(pnode->m_lChild);
+		int rHei=GetHeight(pnode->m_rChild);
 		return lHei>rHei ? lHei+1 : rHei+1;
 	}
 }
@@ -344,16 +360,16 @@ int BTree::layerHeight()
 		//用当前的高度跟取出的队首进行比较
 		if(hei<temp.height)
 			hei=temp.height;
-		if(pnode->m_lChild!=NULL || pnode->m_rChild!=NULL)
+		if((pnode->m_lChild!=NULL && pnode->m_lTag==Link) || pnode->m_rChild!=NULL &&  pnode->m_rTag==Link)
 		{
 			//如果它的左右子树不为空，则进队列
-			if(pnode->m_lChild != NULL)
+			if(pnode->m_lChild != NULL && pnode->m_lTag==Link)
 			{
 				lTemp.ptr=pnode->m_lChild;
 				lTemp.height=temp.height+1; //在原来高度基础上加1,再入队列
 				que.push(lTemp);
 			}
-			if(pnode->m_rChild != NULL)
+			if(pnode->m_rChild != NULL &&  pnode->m_rTag==Link)
 			{
 				rTemp.ptr=pnode->m_rChild;
 				rTemp.height=temp.height+1;
