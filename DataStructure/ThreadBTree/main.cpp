@@ -14,12 +14,15 @@ int main()
 	tree.layerOrder();
 	cout<<"Pre   Vist: ";
 	tree.preOrder();
+	cout<<"Inorder   Vist: ";
+	tree.inOrder();
 	cout<<"Number of leaves: "<<tree.GetLeaves()<<endl;
 	cout<<"Height: "<<tree.layerHeight()<<endl;
 	cout<<"Size: "<<tree.GetSize()<<endl;
 	cout<<"Root: "<<tree.getRoot()->m_data<<endl;
+	cout<<"InOrderThreading..."<<endl;
 	tree.InOrderThreading();
-	tree.Destroy();
-	tree.preOrder();
+	// tree.Destroy();
+	// tree.preOrder();
 	return 0;
 }

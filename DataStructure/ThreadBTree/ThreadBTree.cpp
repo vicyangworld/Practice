@@ -379,8 +379,8 @@ void BTree::_InOrderThreading(BTreeNode *&pCurrent){
 		}
 		if (m_pre->m_rChild == NULL) 
 		{
-			m_pre->m_rTag == Thread;
-			m_pre->m_rChild == pCurrent;
+			m_pre->m_rTag = Thread;
+			m_pre->m_rChild = pCurrent;
 		}
 		m_pre = pCurrent;
 		_InOrderThreading(pCurrent->m_rChild);
@@ -395,13 +395,14 @@ bool BTree::InOrderThreading(){
 		cout<<"Can not new a BTreeNode Object!"<<endl;
 		return false;
 	}
-	m_pBThead->m_rChild = m_pBThead;  //iniciation
-	m_pBThead->m_rTag = Link;
+	m_pBThead->m_rChild = NULL;  //iniciation
 	BTreeNode *pmove = m_proot;
 	if (m_proot == NULL)
 	{
 		m_pBThead->m_lChild = m_pBThead;
 		m_pBThead->m_lTag   = Link;
+		m_pBThead->m_rChild = m_pBThead;
+		m_pBThead->m_rTag   = Link;
 	}
 	else
 	{
@@ -409,28 +410,29 @@ bool BTree::InOrderThreading(){
 		m_pBThead->m_lChild = m_proot;  //
 		m_pBThead->m_lTag   = Link;
 		_InOrderThreading(pmove);       //
-		m_pre->m_rChild = pmove;
+		m_pre->m_rChild = m_pBThead;
 		m_pre->m_rTag = Thread;
-		m_pBThead->m_rChild = pmove;
+		m_pBThead->m_rChild = m_pre;
 	}
 	InOrderThreading_Print();
+	return true;
 }
 
 void BTree::InOrderThreading_Print(){
     BTreeNode *p;  
     p = m_pBThead->m_lChild;           //p指向根结点  
-    while(p != m_proot)
-    { 
+    do{
         while(p->m_lTag == Link)   //当ltag = 0时循环到中序序列的第一个结点  
         {  
             p = p->m_lChild;  
         }
-        cout<<" "<<p->m_data; //显示结点数据，可以更改为其他对结点的操作   
+        cout<<" "<<p->m_data; //显示结点数据，可以更改为其他对结点的操作 
         while(p->m_rTag == Thread && p->m_rChild != m_pBThead)  
         {  
             p = p->m_rChild;  
             cout<<" "<<p->m_data; 
         }  
-        p = p->m_rChild;           //p进入其右子树  
-    }  	
+        p = p->m_rChild;           //p进入其右子树   
+    }while(p != m_pBThead);	
+    cout<<endl;
 }
