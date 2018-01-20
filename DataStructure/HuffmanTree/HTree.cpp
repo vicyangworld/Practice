@@ -13,6 +13,7 @@ HTree::HTree(int *arr, int n){
 	m_HT = NULL;
 
 	m_nAllNodes = 2 * n - 1;
+	m_nLeaves = n;
 	_initHTree();
 	for (int i=0;i<n;i++) //前n个是叶子节点
 	{
@@ -74,4 +75,81 @@ void HTree::View(){
 	{
 		cout<<m_HT[i].m_weight<<"   "<<m_HT[i].m_parent<<"   "<<m_HT[i].m_lchild<<"   "<<m_HT[i].m_rchild<<endl;
 	}
+}
+
+void HTree::Incode(){
+	if (m_HT == NULL)
+	{
+		cout<<"No Huffman Tree!"<<endl;
+		exit(1);
+	}
+    int i = 0;
+    int c = 0;
+    int p = 0;
+    HCode cd;//缓冲变量
+    m_HC = new HCode[m_nLeaves];
+
+    for(i=0;i<m_nLeaves;i++)//依次检测前N个节点，前N个节点为叶子节点，即从Huffman从下往上获得单个字符的编码  
+    {  
+        cd.start = MAXBIT;
+        cd.val = m_HT[i].m_weight;  
+        c = i;              //c为当前节点location  
+        p = m_HT[i].m_parent; //p is the parent of c
+        while(p != -1)  
+        {  
+        	cd.start--;
+            if(m_HT[p].m_lchild == c) 
+                cd.bits[cd.start]='0';//tree[i]是左子树，生成代码'0'
+            else  
+                cd.bits[cd.start]='1';//tree[i]是右子树，生成代码'1'  
+            c = p;  
+            p = m_HT[p].m_parent;  
+        }
+
+        m_HC[i].val = cd.val;//
+        m_HC[i].start = cd.start;
+        for (int j = cd.start; j < MAXBIT; ++j)
+        {
+        	m_HC[i].bits[j] = cd.bits[j];
+        }
+    }
+    _viewCode();
+}
+
+void HTree::_viewCode(){
+	for (int i = 0; i < m_nLeaves; ++i)
+	{
+		for (int j = 0; j < MAXBIT; ++j)
+		{
+			cout<<m_HC[i].bits[j];
+		}
+		cout<<"\t"<<m_HT[i].m_weight<<endl;
+	}
+}
+void HTree::Decode(){
+	for (int i=0;i<m_nLeaves;i++)
+	{
+		cout<<m_HT[i].m_weight<<endl;
+	}
+}
+void HTree::Decode(char * pCode){
+	int nMove = m_nAllNodes-1;//root node
+	int i = 0;
+	while(m_HT[nMove].m_lchild != -1){
+		if(pCode[i]=='0' || pCode[i]=='1')
+		{
+			nMove = pCode[i] == '0' ? m_HT[nMove].m_lchild : m_HT[nMove].m_rchild;
+			i++;
+		}
+		else{
+			cout<<"Wrong parameter of decode()"<<endl;
+			exit(1);		
+		}
+	}
+	if (pCode[i]!='\0')
+	{
+		cout<<"Wrong parameter of decode()"<<endl;
+		exit(1);
+	}
+	cout<<"decode: "<<m_HT[nMove].m_weight<<endl;
 }

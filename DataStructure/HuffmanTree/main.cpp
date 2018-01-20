@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "HTree.h"
 
 int main(){
@@ -6,5 +7,7 @@ int main(){
 		};
 	HTree Htree(arr,sizeof(arr)/sizeof(int));
 	Htree.View();
-	getchar();
+	Htree.Incode();
+	char cd[] = "010";
+	Htree.Decode(cd);
 }
