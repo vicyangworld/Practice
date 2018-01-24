@@ -54,22 +54,15 @@ void heapSort(T arr[], int len){
 	int k = 0;
 	for (int i = len/2-1; i >= 0; i--)  
 		_shift_down(arr,i,len-1);
-	for (int i = 0; i < len; i++)
-		cout << arr[i] << ' ';
-	cout << endl;	
-	for (int i = 0; i < len-1; ++i)
+	for (int i = len-1; i > 0; --i)
 	{
-		_head_tail_exchange(arr,len-1-i);
-		for (int i = 0; i < len; i++)
-			cout << arr[i] << ' ';
-		cout << endl;
-
+		_head_tail_exchange(arr,i);
 	}
 }
 
 int main()
 {
-	int arr[] = { 100, 34, 5, 61, 17, 22, 29, 1};
+	int arr[] = { 100, 34, 5, 61, 17, 22, 29, 1, 45, 6, 12, 9, 14, 21, 31};
 	int len = sizeof(arr)/sizeof(int);
 	heapSort(arr,len);
 	for (int i = 0; i < len; i++)
