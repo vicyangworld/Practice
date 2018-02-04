@@ -286,6 +286,7 @@ template<typename T> void BinaryTree<T>::Delete(BinaryTreeNode<T> *&root,const T
 {
 	BinaryTreeNode<T> *pdel = root;
 	BinaryTreeNode<T> *pleft = NULL;
+	BinaryTreeNode<T> *parent = NULL;
 	if (pdel == NULL)
 	{
 		cout<<"Not found item "<<item<<" to delete"<<endl;
@@ -319,9 +320,11 @@ template<typename T> void BinaryTree<T>::Delete(BinaryTreeNode<T> *&root,const T
 			else
 			{
 				while(pleft->m_pleft != NULL){
+					parent = pleft;
 					pleft  = pleft->m_pleft;
 				}
 			}
+			parent->m_pleft = pleft->m_pright;
 			pleft->m_pleft = pdel->m_pleft;
 			pleft->m_pright= pdel->m_pright;
 		}
@@ -337,6 +340,6 @@ template<typename T> void BinaryTree<T>::Delete(BinaryTreeNode<T> *&root,const T
 	else if(item < pdel->m_data){
 		Delete(pdel->m_pleft,item);
 	}
-
+}
 
 #endif
