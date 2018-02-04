@@ -130,7 +130,6 @@ template<typename T> void BinaryTree<T>::Create(const T* itemArr, int n){
 		while(true){
 			if (itemArr[i] == pmove->m_data)
 			{
-				//cout<<"The item "<<itemArr[idx]<<" is exist:"<<pmove->m_data<<endl;
 				break;
 			}
 			if (itemArr[i] < pmove->m_data)
@@ -151,29 +150,6 @@ template<typename T> void BinaryTree<T>::Create(const T* itemArr, int n){
 		}
 	}
 
-	// while(idx < n){
-	// 	if (itemArr[idx] == pmove->m_data)
-	// 	{
-	// 		cout<<"The item "<<itemArr[idx]<<" is exist:"<<pmove->m_data<<endl;
-	// 		continue;
-	// 	}
-	// 	if (itemArr[idx] < pmove->m_data)
-	// 	{
-	// 		if (pmove->m_pleft==NULL)
-	// 		{
-	// 			pmove->m_pleft = new BinaryTreeNode<T>(itemArr[idx]);
-	// 		}
-	// 		pmove = pmove->m_pleft;
-	// 	}
-	// 	else{
-	// 		if (pmove->m_pright==NULL)
-	// 		{
-	// 			pmove->m_pright = new BinaryTreeNode<T>(itemArr[idx]);
-	// 		}
-	// 		pmove=pstart->m_pright;
-	// 	}
-	// 	idx++;
-	// }
 }
 
 template<typename T> bool BinaryTree<T>::Insert(const T item){
@@ -325,6 +301,7 @@ template<typename T> void BinaryTree<T>::Delete(BinaryTreeNode<T> *&root,const T
 {
 	BinaryTreeNode<T> *pdel = root;
 	BinaryTreeNode<T> *pleft = NULL;
+	BinaryTreeNode<T> *parent = NULL;
 	if (pdel == NULL)
 	{
 		cout<<"Not found item "<<item<<" to delete"<<endl;
@@ -358,9 +335,11 @@ template<typename T> void BinaryTree<T>::Delete(BinaryTreeNode<T> *&root,const T
 			else
 			{
 				while(pleft->m_pleft != NULL){
+					parent = pleft;
 					pleft  = pleft->m_pleft;
 				}
 			}
+			parent->m_pleft = pleft->m_pright;
 			pleft->m_pleft = pdel->m_pleft;
 			pleft->m_pright= pdel->m_pright;
 		}
