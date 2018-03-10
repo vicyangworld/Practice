@@ -5,7 +5,10 @@ typedef struct node
 	int data;
 	struct node* next;
 } node;
-
+//指针的指针是为了修改链表
+//因为直接传递过来指针也“值传递”，不过是复制出另外一个指针，
+//若要在指针的指针就可以是的一级指针*pHead被传递进这个函数了，、
+//就可以在这个指针的基础上就行修改
 void insert(node** pHead, int value)
 {
 	node* nn;
