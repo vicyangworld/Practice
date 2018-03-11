@@ -9,7 +9,7 @@ typedef struct node
 //因为直接传递过来指针也“值传递”，不过是复制出另外一个指针，
 //若要在指针的指针就可以是的一级指针*pHead被传递进这个函数了，、
 //就可以在这个指针的基础上就行修改
-void insert(node** pHead, int value)
+void append(node** pHead, int value)
 {
 	node* nn;
 	nn=(node*)malloc(sizeof(node));
@@ -49,6 +49,33 @@ void reverse(node **pHead)
 	*pHead = pre;
 }
 
+void del(node **pHead, int value)
+{
+	if ((*pHead) == NULL)
+	{
+		return;
+	}
+	node *pCur = *pHead;
+	node *pDel = NULL;
+	if (pCur->data == value)
+	{
+		free(pCur);
+		pCur = NULL;
+		return;
+	}
+	while(pCur!= NULL)
+	{
+		pDel = pCur->next;
+		if (pDel != NULL && pDel->data == value)
+		{
+			pCur->next = pDel->next;
+			free(pDel);
+			pDel = NULL;
+		}
+		pCur = pCur->next;
+	}
+}
+
 void print(node* pHead)
 {
 	if (pHead->next == NULL)
@@ -66,12 +93,14 @@ void print(node* pHead)
 int main(int argc, char const *argv[])
 {
 	node* pHead = NULL;
-	insert(&pHead,1);
-	insert(&pHead,2);
-	insert(&pHead,3);
-	insert(&pHead,4);
+	append(&pHead,1);
+	append(&pHead,2);
+	append(&pHead,3);
+	append(&pHead,4);
 	print(pHead);
 	reverse(&pHead);
+	print(pHead);
+	del(&pHead,2);
 	print(pHead);
 	return 0;
 }
