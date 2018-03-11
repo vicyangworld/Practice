@@ -90,6 +90,19 @@ void print(node* pHead)
 	printf("\n");
 }
 
+void printReverse(node* pHead)
+{
+	if (pHead==NULL)
+	{
+		return;
+	}
+	if(pHead->next != NULL)
+	{
+		printReverse(pHead->next);
+	}
+	printf("%d  ", pHead->data);
+}
+
 int main(int argc, char const *argv[])
 {
 	node* pHead = NULL;
@@ -102,5 +115,7 @@ int main(int argc, char const *argv[])
 	print(pHead);
 	del(&pHead,2);
 	print(pHead);
+	printReverse(pHead);
+	printf("\n");
 	return 0;
 }
