@@ -5,11 +5,12 @@ using std::endl;
 template<typename T>
 void quickSort(T a[],int first, int end)
 {
-	if(first >= end) return;
+	if(first >= end || a==NULL) return;
 	int i = first;
 	int j = end;
 	T key = a[i];    /*用数组的第一个记录作为分区元素*/
 	while(i != j){
+		//首先要从右向左扫描
 		while(i<j && a[j]>=key)    /*从右向左扫描，找第一个码值小于key的记录，并交换到key*/
 			--j;
 		a[i] = a[j];
