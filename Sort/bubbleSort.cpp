@@ -8,10 +8,12 @@ void bubbleSort(T arr[], int len)
 {
 	for (int i = 0; i < len-1; i++)
 	{
+		//这是“向下沉”的做法
 		for (int j = 0; j < len-1-i; j++)
 		{
 			if (arr[j] > arr[j+1])
 			{
+				//通过加减法交换两个数，可能出现溢出，这是要注意的
 				arr[j] = arr[j] + arr[j+1];
 				arr[j+1] = arr[j] - arr[j+1];
 				arr[j] = arr[j] - arr[j+1];
