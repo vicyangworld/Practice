@@ -6,7 +6,8 @@ using std::endl;
 template<typename T>
 void bubbleSort(T arr[], int len)
 {
-	for (int i = 0; i < len-1; i++)
+	//一共有几个待排序元素，就需要几趟
+	for (int i = 0; i < len; i++)
 	{
 		//这是“向下沉”的做法
 		for (int j = 0; j < len-1-i; j++)
