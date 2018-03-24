@@ -6,8 +6,8 @@ template<typename T>
 void quickSort(T a[],int first, int end)
 {
 	if(first >= end || a==NULL) return;
-	int i = first;
-	int j = end;
+	int i = first;   //哨兵1
+	int j = end;     //哨兵2
 	T key = a[i];    /*用数组的第一个记录作为分区元素*/
 	while(i != j){
 		//首先要从右向左扫描
